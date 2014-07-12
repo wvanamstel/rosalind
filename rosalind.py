@@ -9,33 +9,13 @@ def main():
 
 def first_mendel(k, m, n):
     total = k + m + n
-    prob_k = k/total
-    prob_m = m/total
-    prob_n = n/total
     
-    prob = (prob_k * prob_k) + (prob_k * prob_n) + (prob_k * prob_m * 0.5)  
-      
+    prob1 = ( (k/total) * (k-1/(total-1)) ) + ( (k/total) * (m/(total-1)) ) * 2
+    prob2 = ( (n/total) * (k/(total-1)) ) +   ( (n/total) * (m/(total-1))*0.5 )
+    prob3 = ( (m/total) * 0.5 * (n/(total-1)) ) + ( (m/total) * 0.5 + (k/(total-1)) )
+    
+    prob = prob1 + prob2 + prob3  
     return prob
-
-def ros_5():
-    fin = open('./rosalind_ini6.txt', 'r')
-    fout = open('./output.txt', 'w')
-    
-    contents = fin.read().split()
-    dic = {}
-    for string in contents:
-        if string in dic:
-            dic[string] = dic[string] + 1
-        else:
-            dic[string] = 1
-    for key, value in dic.items():
-        print key + " " + str(value)
-      
-    
-    fin.close()
-    fout.close()
-    return 0
-
 
 if __name__ == '__main__':
     main()
