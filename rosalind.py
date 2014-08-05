@@ -5,8 +5,27 @@ Created on Jun 24, 2014
 '''
 
 def main():
-    print rna_to_protein('rosalind_prot.txt')
+    print dna_motif('rosalind_subs.txt')
 
+def dna_motif(file_name):
+    with open(file_name) as fin:
+        content = fin.read().splitlines()
+    fin.close()
+
+    dna_string = content[0]
+    sub_string = content[1]
+    
+    i = 0
+    positions = ""
+    while i < len(dna_string):
+        if (dna_string.find(sub_string, i) != -1):
+            sub_string_pos =  dna_string.find(sub_string, i) + 1
+            i = sub_string_pos
+            positions += str(sub_string_pos) + ' '
+        i+=1
+        
+    return positions
+    
 def rna_to_protein(file_name):
     import re
     fin = open(file_name, 'r')
