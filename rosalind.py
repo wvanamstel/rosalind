@@ -5,10 +5,32 @@ Created on Jun 24, 2014
 '''
 
 def main():
-    print first_mendel(21.,28.,28.)
+    print rna_to_protein('rosalind_prot.txt')
 
-
-
+def rna_to_protein(file_name):
+    import re
+    fin = open(file_name, 'r')
+    content = fin.read()
+    fin.close()
+    codons = re.findall(r'.{1,3}', content, re.DOTALL) #split 3 letter codons from string
+    
+    fin = open('codon_table.txt', 'r') #load codon table and put in dict
+    codon_list = fin.read().split()
+    fin.close()
+    codon_table = {}
+    i = 0
+    while i < len(codon_list):
+        codon_table[ codon_list[i] ] = codon_list[i + 1]
+        i += 2
+        
+    protein_string = '' #construct protein string using codons and codon table
+    for codon in codons:
+        if(codon_table[codon] == 'Stop'):
+            break
+        protein_string += codon_table[codon]
+        
+    return protein_string
+    
 def permutations(i):
     import itertools
     import math
