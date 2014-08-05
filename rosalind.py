@@ -5,7 +5,9 @@ Created on Jun 24, 2014
 '''
 
 def main():
-    permutations(7)
+    print first_mendel(21.,28.,28.)
+
+
 
 def permutations(i):
     import itertools
@@ -21,17 +23,18 @@ def permutations(i):
             solution += " "
         print solution
     
-    
-
 def first_mendel(k, m, n):
-    total = k + m + n
+    '''calculate probability that from 3 gene pairs DD Dd dd, there will be offspring
+    with a dominant allele'''
+    total = (k + m + n)*2 #total number of alleles
+    num_dom = k*2 + m #number of dominant
+    num_rec = m + n*2 #number of recessive
     
-    prob1 = ( (k/total) * (k-1/(total-1)) ) + ( (k/total) * (m/(total-1)) ) * 2
-    prob2 = ( (n/total) * (k/(total-1)) ) +   ( (n/total) * (m/(total-1))*0.5 )
-    prob3 = ( (m/total) * 0.5 * (n/(total-1)) ) + ( (m/total) * 0.5 + (k/(total-1)) )
+    #probability of an offspring with >=1 dominant allele
+    prob1 = (num_dom/total) * (num_dom-1)/(total-1) + ( (num_dom/total) * (num_rec/(total-1)) ) + ( (num_rec/total) * (num_dom/(total-1)) )
+    #prob2 = (num_rec/total)*((num_rec-1)/(total-1)) #complement
     
-    prob = prob1 + prob2 + prob3  
-    return prob
+    return prob1
 
 if __name__ == '__main__':
     main()
