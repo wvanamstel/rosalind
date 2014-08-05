@@ -5,7 +5,23 @@ Created on Jun 24, 2014
 '''
 
 def main():
-    print first_mendel(2.0, 2.0 ,2.0)
+    permutations(7)
+
+def permutations(i):
+    import itertools
+    import math
+    
+    j= range(1,i + 1)
+    
+    print math.factorial(i)
+    for item in list(itertools.permutations(j, i)):
+        solution = ""
+        for element in item:
+            solution += str(element)
+            solution += " "
+        print solution
+    
+    
 
 def first_mendel(k, m, n):
     total = k + m + n
