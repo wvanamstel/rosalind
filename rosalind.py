@@ -156,9 +156,20 @@ class Rosalind(object):
         for pair in itertools.permutations(fasta_dict.keys(), 2):
             if fasta_dict[pair[0]][-3:] == fasta_dict[pair[1]][:3]:
                 print pair[0], pair[1]
+    
+    def expected_offspring(self, file_name):
+        with open(file_name) as fin:
+            offspring = fin.read().split(' ')
+        fin.close()
+        
+        offspring = [int(i) for i in offspring]
+        
+        expected_offspring = [2., 2., 2., 1.5, 1, 0]
+        
+        print sum([x * y for x, y in zip(offspring, expected_offspring)])
                 
     
                 
 if __name__ == '__main__':
     ros = Rosalind()
-    ros.overlap('rosalind_grph.txt')
+    ros.expected_offspring('rosalind_iev.txt')
