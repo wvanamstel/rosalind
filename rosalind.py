@@ -147,29 +147,45 @@ class Rosalind(object):
                (num_rec/(total-1))) + ((num_rec/total) * (num_dom/(total-1)))
 
         return prob
-        
+
     def overlap(self, file_name):
-        #read fasta
-        fasta_dict = hf.read_fasta(file_name)        
-        
+        # read fasta
+        fasta_dict = hf.read_fasta(file_name)
+
         # determine all permutations of strings and determine overlap
         for pair in itertools.permutations(fasta_dict.keys(), 2):
             if fasta_dict[pair[0]][-3:] == fasta_dict[pair[1]][:3]:
                 print pair[0], pair[1]
-    
+
     def expected_offspring(self, file_name):
         with open(file_name) as fin:
             offspring = fin.read().split(' ')
         fin.close()
-        
+
         offspring = [int(i) for i in offspring]
-        
         expected_offspring = [2., 2., 2., 1.5, 1, 0]
-        
         print sum([x * y for x, y in zip(offspring, expected_offspring)])
-                
-    
-                
+
+    def shared_motif(self, file_name):
+        # find largest shared motif in dna strings
+        dna_dict = hf.read_fasta(file_name)
+        dna_list = dna_dict.values()
+        shortest_dna = min(dna_list, key=len)
+
+        # start at largest substring and work down to find matches
+        found = False
+        for i in range(len(shortest_dna), 1, -1):
+            for j in range(len(shortest_dna) - i, -1, -1):
+                if found:
+                    break
+                sub = shortest_dna[j:j+i]
+                if all(sub in dna for dna in dna_list):
+                    found = True
+                    print sub
+
+    def indep_alleles(self, k, N):
+        
+
 if __name__ == '__main__':
     ros = Rosalind()
-    ros.expected_offspring('rosalind_iev.txt')
+    ros.shared_motif('rosalind_lcsm.txt')
