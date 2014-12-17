@@ -7,6 +7,7 @@ import itertools
 import math
 import numpy as np
 import re
+import helper_functions as hf
 
 
 class Rosalind(object):
@@ -146,8 +147,18 @@ class Rosalind(object):
                (num_rec/(total-1))) + ((num_rec/total) * (num_dom/(total-1)))
 
         return prob
-
-
+        
+    def overlap(self, file_name):
+        #read fasta
+        fasta_dict = hf.read_fasta(file_name)        
+        
+        # determine all permutations of strings and determine overlap
+        for pair in itertools.permutations(fasta_dict.keys(), 2):
+            if fasta_dict[pair[0]][-3:] == fasta_dict[pair[1]][:3]:
+                print pair[0], pair[1]
+                
+    
+                
 if __name__ == '__main__':
     ros = Rosalind()
-    ros.consensus_and_profile('test.txt')
+    ros.overlap('rosalind_grph.txt')
