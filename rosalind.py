@@ -183,9 +183,36 @@ class Rosalind(object):
                     found = True
                     print sub
 
-    def indep_alleles(self, k, N):
+    def open_reading_frames(self, file_name):
+        codons = hf.read_codon('dna')  # load dna codon table
+        dna = hf.read_fasta(file_name)  #load dna
+        start_codon = 'ATG'        
+        dna_string = dna.values()[0]
+    
+        lookup = {'A':'T', 'T':'A', 'G':'C', 'C':'G'}
+        dna_rev_string = ''.join([lookup[c] for c in dna_string[::-1]])
         
+        dna_list = [dna_string, dna_rev_string]
+        all_proteins = []
+        for item in dna_list:
+            for i in range(3):
+                dna_codons = re.findall(r'.{1,3}', item[i:], re.DOTALL)
+                protein = ''
+                transcribing = False
+                for codon in dna_codons:
+                    if codon == start_codon and not transcribing:
+                        protein += codons[start_codon]
+                        transcribing = True
+                    elif len(codon) == 3 and codons[codon] == 'Stop' and transcribing:
+                        all_proteins.append(protein)
+                        print protein
+                        protein = ''
+                        transcribing = False
+                    elif transcribing:
+                        protein += codons[codon]
+                        
+        return set(all_proteins)
 
 if __name__ == '__main__':
     ros = Rosalind()
-    ros.shared_motif('rosalind_lcsm.txt')
+    test = ros.open_reading_frames('test.txt')
