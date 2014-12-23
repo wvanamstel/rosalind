@@ -188,31 +188,30 @@ class Rosalind(object):
         dna = hf.read_fasta(file_name)  #load dna
         start_codon = 'ATG'        
         dna_string = dna.values()[0]
-    
+        
+        # reverse to string to read the opposite site of the dna strand
         lookup = {'A':'T', 'T':'A', 'G':'C', 'C':'G'}
         dna_rev_string = ''.join([lookup[c] for c in dna_string[::-1]])
         
         dna_list = [dna_string, dna_rev_string]
         all_proteins = []
         for item in dna_list:
-            for i in range(3):
-                dna_codons = re.findall(r'.{1,3}', item[i:], re.DOTALL)
-                protein = ''
-                transcribing = False
-                for codon in dna_codons:
-                    if codon == start_codon and not transcribing:
-                        protein += codons[start_codon]
-                        transcribing = True
-                    elif len(codon) == 3 and codons[codon] == 'Stop' and transcribing:
-                        all_proteins.append(protein)
-                        print protein
-                        protein = ''
-                        transcribing = False
-                    elif transcribing:
-                        protein += codons[codon]
-                        
+            for i in range(len(item)):
+                codon = item[i:i+3]
+                if codon == start_codon:
+                    protein = ''
+                    protein += codons[codon]
+                    for j in range(i+3, len(item), 3):
+                        codon = item[j:j+3]
+                        if len(codon) == 3 and codons[codon] == 'Stop':
+                            all_proteins.append(protein)
+                            break
+                        elif len(codon) == 3:
+                            protein += codons[codon]
+                
         return set(all_proteins)
 
 if __name__ == '__main__':
     ros = Rosalind()
-    test = ros.open_reading_frames('test.txt')
+    for item in ros.open_reading_frames('rosalind_orf.txt'):
+        print item
