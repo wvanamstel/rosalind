@@ -46,3 +46,12 @@ def read_codon(table='dna'):
         i += 2
     
     return codon_table
+
+def to_rna(dna):
+#==============================================================================
+#     IN: string, dna strand
+#     OUT: string, transcribed dna into rna
+#==============================================================================
+    lookup = {'A':'A', 'T':'U', 'G':'G', 'C':'C'}
+    rna = ''.join([lookup[x] for x in dna])
+    return rna

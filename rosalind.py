@@ -184,6 +184,12 @@ class Rosalind(object):
                     print sub
 
     def open_reading_frames(self, file_name):
+#==============================================================================
+#         Transcribe a dna strand into a protein, starting anywhere on the 
+#         strand
+#         IN: txt file in FASTA
+#         OUT: transcribed proteins
+#==============================================================================
         codons = hf.read_codon('dna')  # load dna codon table
         dna = hf.read_fasta(file_name)  #load dna
         start_codon = 'ATG'        
@@ -210,8 +216,35 @@ class Rosalind(object):
                             protein += codons[codon]
                 
         return set(all_proteins)
-
+        
+    def transition_transversion(self, file_name):
+#==============================================================================
+#         Calculate the transition/transversion ratio of 2 dna strands
+#         IN: txt file in FASTA containing 2 strands of equal length
+#         OUT: ratio
+#==============================================================================
+        dna = hf.read_fasta(file_name).values()
+        trans = ['AG', 'CT']
+        dna_1 = list(dna[0])
+        dna_2 = list(dna[1])
+        transitions = 0.
+        transversions = 0.
+        
+        for i in range(len(dna_1)):
+            if dna_1[i] != dna_2[i]:
+                pair = ''.join(sorted((dna_1[i] + dna_2[i]).upper()))
+                if pair in trans:
+                    transitions += 1
+                else:
+                    transversions += 1
+        
+        return transitions/transversions
+    
+    def rna_splicing(self, file_name):
+        dna = hf.read_fasta(file_name).values()
+        dna_string = dna[0]
+        introns = [dna[1], dna[2]]
+        
 if __name__ == '__main__':
     ros = Rosalind()
-    for item in ros.open_reading_frames('rosalind_orf.txt'):
-        print item
+    print ros.transition_transversion('test.txt')
