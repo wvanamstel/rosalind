@@ -34,6 +34,6 @@ class Algorithms(object):
 
 if __name__ == '__main__':
     alg = Algorithms()
-    item = 2
+    item = 4
     lst = [0, 1, 2, 3, 4]
     print alg.bin_search(item, lst, 0, len(lst) -1)
